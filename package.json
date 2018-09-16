@@ -1,0 +1,27 @@
+{
+  "name": "fistoffive",
+  "version": "1.0.0",
+  "description": "This is a game to support decision making, for distributed teams",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "Agile",
+    "Fist of Five",
+    "Software Development",
+    "Distributed Teams"
+  ],
+  "author": "Roman Kreisel",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3",
+    "ws": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/node": "^10.9.4",
+    "@types/ws": "^6.0.1",
+    "typescript": "^3.0.3"
+  }
+}
