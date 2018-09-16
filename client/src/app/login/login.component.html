@@ -1,0 +1,13 @@
+<div>
+    <form>
+        <form class="form">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="(Mandatory) Your name" [(ngModel)]="username" name="username">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <input matInput placeholder="(Optional) Got a session ID? Paste it here!" [(ngModel)]="sessionId" name="sessionId">
+            </mat-form-field>
+            <button mat-raised-button color="primary" [disabled]="buttonDisabled" (click)="refresh()"> {{ buttonText }}</button>
+          </form>
+    </form>
+  </div>
