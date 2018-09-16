@@ -17,6 +17,22 @@ export class FistOfFiveServer {
     start() {
         //initialize the WebSocket server instance
 
+        setInterval(() => {
+            //TODO: clear sessionsForSessionIDs and sessionsForClientIDs
+            this.sessionsForSessionIds.forEach((value,key,map)=>
+            {
+                if(value.clients.size === 0){
+                    map.delete(key);
+                }
+            });
+            this.sessionsForClientIds.forEach((value,key,map)=>
+            {
+                if(value.clients.size === 0){
+                    map.delete(key);
+                }
+            });
+        }, 60000);
+
         this.server.on('connection', (ws: WebSocket) => {
             let clientId = IdGenerator.generateId(32);
 
@@ -46,11 +62,8 @@ export class FistOfFiveServer {
             });
 
             ws.on('close', () => {
-                let session = (<FistOfFiveSession>this.sessionsForClientIds.get(clientId));
-                if(session){
-                    session.unregisterClient(clientId);
-                }
-        });
+                this.unregister(clientId);
+            });
 
             let example: RegisterRequestMessage = {
                 requestType: RequestType.Register,
