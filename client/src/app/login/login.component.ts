@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-login',
@@ -6,8 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent  {
+  gameService: GameService;
 
-  constructor() { }
+  constructor(gameService: GameService) {
+    this.gameService = gameService;
+   }
 
   public username = '';
   public sessionId = '';
@@ -33,6 +37,7 @@ export class LoginComponent  {
   public refresh(){
     console.log('username: ' + this.username);
     console.log('sessionId: ' + this.sessionId);
+    this.gameService.connect(this.username, this.sessionId);
   }
 
 }

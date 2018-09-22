@@ -8,4 +8,8 @@
     "test.ts",
     "**/*.spec.ts"
   ]
+  /*,
+  "files": [
+    "./app/messages.d.ts"
+  ]*/
 }

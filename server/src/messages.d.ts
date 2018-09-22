@@ -1,6 +1,3 @@
-import { FistOfFiveClient } from "./fist-of-five-client";
-
-
 /*
  * Requests (client -> server)
  */
