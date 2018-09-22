@@ -1,21 +1,58 @@
 import * as http from 'http';
-import * as WebSocket from 'ws';
 import {FistOfFiveSession} from './fist-of-five-session';
-import { start } from 'repl';
 import { RequestMessage, RequestType, RegisterRequestMessage, VoteRequestMessage, GameRestartRequestMessage } from './messages';
 import { IdGenerator } from './id-generator';
+import SocketIO = require('socket.io');
+
 
 export class FistOfFiveServer {
-    private server: WebSocket.Server;
+    private io: SocketIO.Server;
     private sessionsForSessionIds = new Map<string, FistOfFiveSession>();
     private sessionsForClientIds = new Map<string, FistOfFiveSession>();
 
-    constructor(websocketServer: WebSocket.Server){
-        this.server = websocketServer;
-    }
+    constructor(server: http.Server){
+        this.io = SocketIO(server)
 
-    start() {
-        //initialize the WebSocket server instance
+        this.io.on('connect', (socket: SocketIO.Socket) => {
+            let clientId = IdGenerator.generateId(32);
+
+            socket.on('message', (requestMessage: RequestMessage) => {
+                if(requestMessage.requestType === RequestType.Register){
+                    this.register(clientId, socket, <RegisterRequestMessage> requestMessage);
+                    let example: VoteRequestMessage = {
+                        requestType: RequestType.Vote,
+                        fingers: 3
+                    };
+                    socket.send(example);
+                } else if (requestMessage.requestType === RequestType.Vote){
+                    let voteMessage = <VoteRequestMessage> requestMessage;
+                    let session = (<FistOfFiveSession>this.sessionsForClientIds.get(clientId));
+                    if(session){
+                        session.vote(clientId, voteMessage.fingers);
+                    }
+                } else if (requestMessage.requestType === RequestType.GameRestart){
+                    let restartMessage = <GameRestartRequestMessage> requestMessage;
+                    let session = (<FistOfFiveSession>this.sessionsForClientIds.get(clientId));
+                    if(session){
+                        session.restartGame(clientId);
+                    }
+
+                }
+            });
+
+            socket.on('disconnect', () => {
+                this.unregister(clientId);
+            });
+
+            let example: RegisterRequestMessage = {
+                requestType: RequestType.Register,
+                sessionId: 'abc',
+                userName: 'Roman'
+            };
+            socket.send(example);
+        });
+
+
 
         setInterval(() => {
             //TODO: clear sessionsForSessionIDs and sessionsForClientIDs
@@ -33,46 +70,6 @@ export class FistOfFiveServer {
             });
         }, 60000);
 
-        this.server.on('connection', (ws: WebSocket) => {
-            let clientId = IdGenerator.generateId(32);
-
-            ws.on('message', (message: string) => {
-                let messageObject: RequestMessage = JSON.parse(message);
-                if(messageObject.requestType === RequestType.Register){
-                    this.register(clientId, ws, <RegisterRequestMessage> messageObject);
-                    let example: VoteRequestMessage = {
-                        requestType: RequestType.Vote,
-                        fingers: 3
-                    };
-                    ws.send(JSON.stringify(example));
-                } else if (messageObject.requestType === RequestType.Vote){
-                    let voteMessage = <VoteRequestMessage> messageObject;
-                    let session = (<FistOfFiveSession>this.sessionsForClientIds.get(clientId));
-                    if(session){
-                        session.vote(clientId, voteMessage.fingers);
-                    }
-                } else if (messageObject.requestType === RequestType.GameRestart){
-                    let restartMessage = <GameRestartRequestMessage> messageObject;
-                    let session = (<FistOfFiveSession>this.sessionsForClientIds.get(clientId));
-                    if(session){
-                        session.restartGame(clientId);
-                    }
-
-                }
-            });
-
-            ws.on('close', () => {
-                this.unregister(clientId);
-            });
-
-            let example: RegisterRequestMessage = {
-                requestType: RequestType.Register,
-                sessionId: 'abc',
-                userName: 'Roman'
-            };
-            ws.send(JSON.stringify(example));
-
-        });
     }
 
     private unregister(clientId: string){
@@ -87,7 +84,7 @@ export class FistOfFiveServer {
     }
 
 
-    private register(clientId: string, websocket: WebSocket, registerMessage: RegisterRequestMessage){
+    private register(clientId: string, websocket: SocketIO.Socket, registerMessage: RegisterRequestMessage){
         if(this.sessionsForSessionIds.has(clientId)){
             console.error('Register Message received, when client was already registered');
             this.unregister(clientId);

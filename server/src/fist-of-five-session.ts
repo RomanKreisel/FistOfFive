@@ -1,7 +1,6 @@
 import {FistOfFiveClient} from './fist-of-five-client';
-import * as WebSocket from 'ws';
-import {IdGenerator} from './id-generator';
 import { GameStatusResponseMessage, ResponseType, ClientMessage } from './messages';
+import SocketIO = require('socket.io');
 
 export class FistOfFiveSession {
 
@@ -14,9 +13,9 @@ export class FistOfFiveSession {
         this._sessionId = sessionId;
     }
 
-    public registerClient(clientId: string, username: string, websocket: WebSocket){
+    public registerClient(clientId: string, username: string, socket: SocketIO.Socket){
         this.clientIdsInOrder.push(clientId);
-        this.clients.set(clientId, new FistOfFiveClient(clientId, username, websocket));
+        this.clients.set(clientId, new FistOfFiveClient(clientId, username, socket));
         this.sendGameStatusResponse()
         console.log('Client ' + clientId + ' joined session ' + this.sessionId + ' ('+this.clients.size+' client(s) connected in this session)');
     }
@@ -77,23 +76,17 @@ export class FistOfFiveSession {
         for(let clientId of this.clients.keys()){
             let client = this.clients.get(clientId);
             if(client instanceof FistOfFiveClient){
-                try {
-                    client.websocket().send(JSON.stringify(this.getGameStatusResponseMessage(clientId)), (error) => {
-                        if(error){
-                            console.log('Error (async) sending message to client ' + clientId + '. Client will be unregistered from this session');
-                            console.log(JSON.stringify(error));
-                            setTimeout(() => {
-                                this.unregisterClient(clientId);
-                            }, 100);
-                        }
-                    });
+                // try {
+                    client.socket().send(this.getGameStatusResponseMessage(clientId));
+                /*
                 }catch(error){
                     console.log('Error sending message to client ' + clientId + '. Client will be unregistered from this session');
                     setTimeout(() => {
                         this.unregisterClient(clientId);
                     }, 100);
-            }
-            }
+                }
+                    */
+                }
         }
     }
 

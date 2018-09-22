@@ -3,6 +3,7 @@ import * as http from 'http';
 import * as WebSocket from 'ws';
 import * as fs from 'fs';
 import {FistOfFiveServer} from './fist-of-five-server';
+import SocketIO = require('socket.io');
 
 const app = express();
 
@@ -15,18 +16,7 @@ app.get('/', function(req, res) {
     .pipe(res);
 });
 
-let fistOfFiveServer = new FistOfFiveServer(new WebSocket.Server({server}));
-fistOfFiveServer.start()
-  
-/*
-server.on('request', function(request) {
-    console.log('abc');
-});
-
-server.on('connection', function(socket) {
-    console.log('xyz' + socket.localAddress + ":" + socket.localPort);
-});
-*/
+let fistOfFiveServer = new FistOfFiveServer(server);
 
 
 //start our server

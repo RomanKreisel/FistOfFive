@@ -1,17 +1,17 @@
-import * as WebSocket from 'ws';
+import SocketIO = require('socket.io');
 
 export class FistOfFiveClient {
 
     private _clientId: string;
     private _username: string;
-    private _websocket: WebSocket;
+    private _socket: SocketIO.Socket;
 
     public vote: number = -1;
 
-    constructor(clientId: string, username: string, websocket: WebSocket){
+    constructor(clientId: string, username: string, socket: SocketIO.Socket){
         this._clientId = clientId;
         this._username = username;
-        this._websocket = websocket;
+        this._socket = socket;
     }
 
     clientId() {
@@ -28,10 +28,10 @@ export class FistOfFiveClient {
         }
     }
 
-    websocket(){
+    socket(){
         get:
         {
-            return this._websocket;
+            return this._socket;
         }
     }
 }
