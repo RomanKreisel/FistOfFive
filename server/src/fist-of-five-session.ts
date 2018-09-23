@@ -28,7 +28,7 @@ export class FistOfFiveSession {
             }
         });
         if(nameAlreadyPresent){
-            return this.findUsername(proposal, iterator+1);
+            return this.findUsername(proposal, Math.max(2, iterator+1));
         }
         return username;
     }
@@ -57,11 +57,24 @@ export class FistOfFiveSession {
     }
 
     public vote(clientId: string, vote: number){
-        if(vote < 1 || vote > 5){
+        if(vote < 0 || vote > 5){
             console.log('Client ' + clientId + ' voted ' + vote + ', which isn\'t allowed');
             return;
         }
         let client = <FistOfFiveClient> this.clients.get(clientId);
+        if(client.vote > 0){
+            let allClientsVoted = true;
+            this.clients.forEach((client) => {
+                if(client.vote <0 ){
+                    allClientsVoted = false;
+                }
+            });
+            if(allClientsVoted){
+                console.log('Voting not allowed, after all clients already voted');
+                return;
+            }
+        }
+
         client.vote = vote;
         if(this.clientVotes.indexOf(clientId) === -1){
             this.clientVotes.push(clientId);

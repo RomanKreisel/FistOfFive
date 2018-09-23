@@ -1,4 +1,21 @@
-<p>
-  game works!
-</p>
-<div>Logged in to {{ sessionId }} </div>
+<div>
+  <div>
+    <div>How many fingers do you want to raise?</div>
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle value="bold" (click)="vote(0)">0</mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(1)">1</mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(2)">2</mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(3)">3</mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(4)">4</mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(5)">5</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <table>
+    <tr>
+      <th>Player</th><th>Vote</th>
+    </tr>
+    <tr *ngFor="let client of clients">
+        <td *ngIf="client.thisIsYou"><b>{{ client.username }}</b></td><td *ngIf="!client.thisIsYou">{{ client.username }}</td><td *ngIf="client.hasVoted && client.vote >=0">{{client.vote}}</td><td *ngIf="client.hasVoted && client.vote < 0">!</td><td *ngIf="!client.hasVoted">?</td>
+    </tr>
+  </table>
+</div>

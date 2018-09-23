@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as socketIo from 'socket.io-client';
-import { RegisterRequestMessage, RequestType, RequestMessage, ClientMessage, ResponseMessage, ResponseType, GameStatusResponseMessage, RegisteredResponseMessage } from '../../../common/src/messages';
+import { RegisterRequestMessage, RequestType, RequestMessage, ClientMessage, ResponseMessage, ResponseType, GameStatusResponseMessage, RegisteredResponseMessage, VoteRequestMessage } from '../../../common/src/messages';
 import { environment } from '../environments/environment.prod';
 import { Router } from '@angular/router';
 
@@ -54,22 +54,26 @@ export class GameService {
       userName: username
     }
     this.socket.send(message);
-    
-
-
-    /*let ws = new WebSocket('ws://localhost:8999');
-    ws.onopen = (event) => {
-      let message= {
-        requestType: 0,
-        sessionId: sessionId, 
-        userName: username
-      }
-      ws.send(JSON.stringify(message));
-    };
-
-    ws.onmessage = (event) => {
-      console.log("received: " + event.data);
-    };
-    */
   }
+
+  public get myClient(): ClientMessage {
+    let myClients = this.clients.filter((client) => {
+      client.thisIsYou
+    });
+    return myClients[0];
+  }
+
+  public canVote(): boolean {
+    let myClient = this.myClient;
+    return myClient.hasVoted && myClient.vote > 0;
+  }
+
+  public vote(fingers: number) {
+    let message: VoteRequestMessage = {
+      requestType: RequestType.Vote,
+      fingers: fingers
+    }
+    this.socket.send(message);
+  }
+
 }

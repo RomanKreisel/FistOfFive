@@ -1,6 +1,7 @@
 import { Component, OnInit, NgModule } from '@angular/core';
 import { GameService } from '../game.service';
 import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { ClientMessage } from '../../../../common/src/messages';
 
 @Component({
   selector: 'app-game',
@@ -8,6 +9,7 @@ import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router'
   styleUrls: ['./game.component.css'],
 })
 export class GameComponent implements OnInit {
+  private myVote: number = -1;
 
   constructor(
     private gameService: GameService,
@@ -18,6 +20,14 @@ export class GameComponent implements OnInit {
 
   public get sessionId(): string {
     return this.gameService.sessionId;
+  }
+
+  public get clients(): ClientMessage[]  {
+    return this.gameService.clients;
+  }
+
+  public vote(fingers: number){
+    this.gameService.vote(fingers);
   }
 
   ngOnInit() {
@@ -33,5 +43,6 @@ export class GameComponent implements OnInit {
       }
     }
   }
+
 
 }
