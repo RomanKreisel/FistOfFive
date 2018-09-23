@@ -1,20 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent  {
+export class LoginComponent implements OnInit  {
   gameService: GameService;
+  public username = '';
+  public sessionId = '';
+  public sessionIdFieldAvailable = true;
 
-  constructor(gameService: GameService) {
+  constructor(
+    gameService: GameService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {
     this.gameService = gameService;
    }
 
-  public username = '';
-  public sessionId = '';
 
 
   public get buttonText()
@@ -34,10 +40,19 @@ export class LoginComponent  {
     return true;
   }
 
-  public refresh(){
-    console.log('username: ' + this.username);
-    console.log('sessionId: ' + this.sessionId);
+  public login(){
     this.gameService.connect(this.username, this.sessionId);
+  }
+
+  ngOnInit() {
+    if(this.gameService.sessionId == null){
+      this.activatedRoute.paramMap.subscribe((value) => {
+        this.sessionId = value.get('sessionId');
+        if(this.sessionId){
+          this.sessionIdFieldAvailable = false;
+        }
+      });
+    }
   }
 
 }

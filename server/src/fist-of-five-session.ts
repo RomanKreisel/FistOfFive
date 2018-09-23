@@ -1,5 +1,5 @@
 import {FistOfFiveClient} from './fist-of-five-client';
-import { GameStatusResponseMessage, ResponseType, ClientMessage } from './messages';
+import { GameStatusResponseMessage, ResponseType, ClientMessage } from '../../common/src/messages';
 import SocketIO = require('socket.io');
 
 export class FistOfFiveSession {
@@ -13,7 +13,28 @@ export class FistOfFiveSession {
         this._sessionId = sessionId;
     }
 
+    public findUsername(proposal: string, iterator = 0): string{
+        let username = proposal;
+        if(!username){
+            username = "Dummy";
+        }
+        if(iterator > 0){
+            username = proposal + " (" + iterator + ")";
+        }
+        let nameAlreadyPresent = false;
+        this._clients.forEach((client) => {
+            if(client.username() === username){
+                nameAlreadyPresent = true;
+            }
+        });
+        if(nameAlreadyPresent){
+            return this.findUsername(proposal, iterator+1);
+        }
+        return username;
+    }
+
     public registerClient(clientId: string, username: string, socket: SocketIO.Socket){
+        username = this.findUsername(username);
         this.clientIdsInOrder.push(clientId);
         this.clients.set(clientId, new FistOfFiveClient(clientId, username, socket));
         this.sendGameStatusResponse()
@@ -72,22 +93,14 @@ export class FistOfFiveSession {
     }
 
     private sendGameStatusResponse(){
-        let clientsToUnregister = [];
-        for(let clientId of this.clients.keys()){
-            let client = this.clients.get(clientId);
-            if(client instanceof FistOfFiveClient){
-                // try {
+        setTimeout(() => {
+            for(let clientId of this.clients.keys()){
+                let client = this.clients.get(clientId);
+                if(client instanceof FistOfFiveClient){
                     client.socket().send(this.getGameStatusResponseMessage(clientId));
-                /*
-                }catch(error){
-                    console.log('Error sending message to client ' + clientId + '. Client will be unregistered from this session');
-                    setTimeout(() => {
-                        this.unregisterClient(clientId);
-                    }, 100);
                 }
-                    */
-                }
-        }
+            }
+        }, 1);
     }
 
     private getGameStatusResponseMessage(myClientId: string): GameStatusResponseMessage{

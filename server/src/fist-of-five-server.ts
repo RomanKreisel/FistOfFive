@@ -1,6 +1,6 @@
 import * as http from 'http';
 import {FistOfFiveSession} from './fist-of-five-session';
-import { RequestMessage, RequestType, RegisterRequestMessage, VoteRequestMessage, GameRestartRequestMessage } from './messages';
+import { RequestMessage, RequestType, RegisterRequestMessage, VoteRequestMessage, GameRestartRequestMessage, ConnectedResponseMessage, ResponseType, RegisteredResponseMessage } from '../../common/src/messages';
 import { IdGenerator } from './id-generator';
 import SocketIO = require('socket.io');
 
@@ -17,13 +17,14 @@ export class FistOfFiveServer {
             let clientId = IdGenerator.generateId(32);
 
             socket.on('message', (requestMessage: RequestMessage) => {
+                console.log("Incoming message: ", requestMessage)
                 if(requestMessage.requestType === RequestType.Register){
-                    this.register(clientId, socket, <RegisterRequestMessage> requestMessage);
-                    let example: VoteRequestMessage = {
-                        requestType: RequestType.Vote,
-                        fingers: 3
+                    let sessionId = this.register(clientId, socket, <RegisterRequestMessage> requestMessage);
+                    let registeredResponse: RegisteredResponseMessage = {
+                        responseType: ResponseType.Registered,
+                        sessionId: sessionId
                     };
-                    socket.send(example);
+                    socket.send(registeredResponse);
                 } else if (requestMessage.requestType === RequestType.Vote){
                     let voteMessage = <VoteRequestMessage> requestMessage;
                     let session = (<FistOfFiveSession>this.sessionsForClientIds.get(clientId));
@@ -44,12 +45,10 @@ export class FistOfFiveServer {
                 this.unregister(clientId);
             });
 
-            let example: RegisterRequestMessage = {
-                requestType: RequestType.Register,
-                sessionId: 'abc',
-                userName: 'Roman'
+            let connectedMessage: ConnectedResponseMessage = {
+                responseType: ResponseType.Connected
             };
-            socket.send(example);
+            socket.send(connectedMessage);
         });
 
 
@@ -60,12 +59,14 @@ export class FistOfFiveServer {
             {
                 if(value.clients.size === 0){
                     map.delete(key);
+                    console.log("Session " + key + " garbage collected");
                 }
             });
             this.sessionsForClientIds.forEach((value,key,map)=>
             {
                 if(value.clients.size === 0){
                     map.delete(key);
+                    console.log("Client " + key + " garbage collected");
                 }
             });
         }, 60000);
@@ -84,7 +85,7 @@ export class FistOfFiveServer {
     }
 
 
-    private register(clientId: string, websocket: SocketIO.Socket, registerMessage: RegisterRequestMessage){
+    private register(clientId: string, websocket: SocketIO.Socket, registerMessage: RegisterRequestMessage): string{
         if(this.sessionsForSessionIds.has(clientId)){
             console.error('Register Message received, when client was already registered');
             this.unregister(clientId);
@@ -103,5 +104,6 @@ export class FistOfFiveServer {
             this.sessionsForSessionIds.set(session.sessionId, session);
             this.sessionsForClientIds.set(clientId, session);
         }
+        return registerMessage.sessionId;
     }
 }

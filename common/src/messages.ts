@@ -32,15 +32,26 @@ export interface RequestMessage {
 
 /*
  * Responses (server -> client)
- */
+ */ 
 
 export enum ResponseType {
+    Connected,
+    Registered,
     GameStatus
 }
+
 
 export interface ResponseMessage {
     responseType: ResponseType;
 }
+
+export interface RegisteredResponseMessage extends ResponseMessage {
+    sessionId: string
+}    
+
+
+export interface ConnectedResponseMessage extends ResponseMessage {
+}    
 
 export interface GameStatusResponseMessage extends ResponseMessage {
     clients: ClientMessage[],
