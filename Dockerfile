@@ -10,11 +10,18 @@ COPY client ./client
 COPY common ./common
 COPY server ./server
 
+WORKDIR /fist-of-five/server
+RUN npm install
+RUN npm run build
+
 WORKDIR /fist-of-five/client
 RUN npm install
 RUN npm run build
 
+RUN mkdir -p /fist-of-five/client/dist/fist-of-five /fist-of-five/server/dist/client
+RUN cp -a /fist-of-five/client/dist/fist-of-five /fist-of-five/server/dist/client
 
-# If you are building your code for production
-# RUN npm install --only=production
+WORKDIR /fist-of-five/server
+CMD npm run run
 
+EXPOSE 8999
