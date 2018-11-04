@@ -3,6 +3,7 @@ import * as socketIo from 'socket.io-client';
 import { RegisterRequestMessage, RequestType, RequestMessage, ClientMessage, ResponseMessage, ResponseType, GameStatusResponseMessage, RegisteredResponseMessage, VoteRequestMessage, GameRestartRequestMessage } from '../../../common/src/messages';
 import { environment } from '../environments/environment.prod';
 import { Router } from '@angular/router';
+import { isDevMode } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,11 @@ export class GameService {
   constructor(
     private router: Router
   ) { 
-    // if(isDevMode()){
-    //  this.socket = socketIo();
-    //} else {
+    if(isDevMode()){
       this.socket = socketIo('http://localhost:8999');
-    //}
+    } else {
+      this.socket = socketIo();
+    }
     this.socket.on('message', (responseMessage: ResponseMessage) => {
       console.log('Incoming message', responseMessage);
       switch(responseMessage.responseType){

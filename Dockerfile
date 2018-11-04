@@ -16,10 +16,10 @@ RUN npm run build
 
 WORKDIR /fist-of-five/client
 RUN npm install
-RUN npm run build
+RUN npm run build:prod
 
 RUN mkdir -p /fist-of-five/client/dist/fist-of-five /fist-of-five/server/dist/client
-RUN cp -a /fist-of-five/client/dist/fist-of-five /fist-of-five/server/dist/client
+RUN cp -a /fist-of-five/client/dist/fist-of-five/* /fist-of-five/server/dist/client
 
 WORKDIR /fist-of-five/server
 CMD npm run run
