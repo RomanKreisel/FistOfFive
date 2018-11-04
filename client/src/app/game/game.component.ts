@@ -26,8 +26,16 @@ export class GameComponent implements OnInit {
     return this.gameService.clients;
   }
 
+  public canRestart() {
+    return this.gameService.canRestart();
+  }
+  
   public vote(fingers: number){
     this.gameService.vote(fingers);
+  }
+
+  public restart() {
+    this.gameService.restart();
   }
 
   ngOnInit() {

@@ -4,7 +4,8 @@
   "description": "This is a game to support decision making, for distributed teams",
   "main": "src/server.js",
   "scripts": {
-    "test": "test"
+    "compile": "tsc",
+    "start": "node dist/server/src/server.js"
   },
   "keywords": [
     "Agile",

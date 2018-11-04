@@ -88,10 +88,14 @@ export class FistOfFiveSession {
 
     restartGame(clientId: string): any {
         if(this.areYouAdmin(clientId)){
-            this.clientVotes = this.clientVotes.slice(0);
+            this.clientVotes.slice(0);
+            this.clients.forEach((client) => {
+                client.vote = -1;
+            });
             this.sendGameStatusResponse();
+            console.log('Game restarted for session ' + this.sessionId)
         } else {
-            console.log('Client ' + clientId + 'tried to reset the game, but isn\'t admin');
+            console.log('Client ' + clientId + ' in session ' + this.sessionId + ' tried to reset the game, but isn\'t admin');
         }
     }
 

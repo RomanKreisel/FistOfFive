@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as socketIo from 'socket.io-client';
-import { RegisterRequestMessage, RequestType, RequestMessage, ClientMessage, ResponseMessage, ResponseType, GameStatusResponseMessage, RegisteredResponseMessage, VoteRequestMessage } from '../../../common/src/messages';
+import { RegisterRequestMessage, RequestType, RequestMessage, ClientMessage, ResponseMessage, ResponseType, GameStatusResponseMessage, RegisteredResponseMessage, VoteRequestMessage, GameRestartRequestMessage } from '../../../common/src/messages';
 import { environment } from '../environments/environment.prod';
 import { Router } from '@angular/router';
 
@@ -37,7 +37,14 @@ export class GameService {
           let gameStatusMessage = <GameStatusResponseMessage>responseMessage;
           this.clients.splice(0);
           gameStatusMessage.clients.forEach((client) => {
-            this.clients.push(client);
+            if(client.thisIsYou){
+              this.clients.push(client);
+            }
+          });
+          gameStatusMessage.clients.forEach((client) => {
+            if(!client.thisIsYou){
+              this.clients.push(client);
+            }
           });
           break;
         default:
@@ -56,16 +63,20 @@ export class GameService {
     this.socket.send(message);
   }
 
-  public get myClient(): ClientMessage {
+  public get myClient() {
     let myClients = this.clients.filter((client) => {
-      client.thisIsYou
+      return client.thisIsYou
     });
-    return myClients[0];
+    if(myClients.length > 0){
+      return myClients[0];
+    } else {
+      return null;
+    }
   }
 
-  public canVote(): boolean {
+  public canVote() {
     let myClient = this.myClient;
-    return myClient.hasVoted && myClient.vote > 0;
+    return myClient && myClient.hasVoted && myClient.vote > 0;
   }
 
   public vote(fingers: number) {
@@ -73,6 +84,18 @@ export class GameService {
       requestType: RequestType.Vote,
       fingers: fingers
     }
+    this.socket.send(message);
+  }
+
+  public canRestart() {
+    let myClient = this.myClient;
+    return myClient && myClient.isAdmin
+  }
+
+  public restart(){
+    let message: GameRestartRequestMessage = {
+      requestType: RequestType.GameRestart
+    };
     this.socket.send(message);
   }
 

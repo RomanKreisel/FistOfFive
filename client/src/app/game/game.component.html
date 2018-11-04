@@ -1,21 +1,39 @@
-<div>
-  <div>
+<div class="game-panel">
+  <div class="choice-panel">
     <div>How many fingers do you want to raise?</div>
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-        <mat-button-toggle value="bold" (click)="vote(0)">0</mat-button-toggle>
-        <mat-button-toggle value="bold" (click)="vote(1)">1</mat-button-toggle>
-        <mat-button-toggle value="bold" (click)="vote(2)">2</mat-button-toggle>
-        <mat-button-toggle value="bold" (click)="vote(3)">3</mat-button-toggle>
-        <mat-button-toggle value="bold" (click)="vote(4)">4</mat-button-toggle>
-        <mat-button-toggle value="bold" (click)="vote(5)">5</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-  <table>
-    <tr>
-      <th>Player</th><th>Vote</th>
-    </tr>
-    <tr *ngFor="let client of clients">
-        <td *ngIf="client.thisIsYou"><b>{{ client.username }}</b></td><td *ngIf="!client.thisIsYou">{{ client.username }}</td><td *ngIf="client.hasVoted && client.vote >=0">{{client.vote}}</td><td *ngIf="client.hasVoted && client.vote < 0">!</td><td *ngIf="!client.hasVoted">?</td>
-    </tr>
-  </table>
+        <mat-button-toggle value="bold" (click)="vote(0)"><img class="vote-icon" src="assets/fist-zero.svg"></mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(1)"><img class="vote-icon" src="assets/fist-one.svg"></mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(2)"><img class="vote-icon" src="assets/fist-two.svg"></mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(3)"><img class="vote-icon" src="assets/fist-three.svg"></mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(4)"><img class="vote-icon" src="assets/fist-four.svg"></mat-button-toggle>
+        <mat-button-toggle value="bold" (click)="vote(5)"><img class="vote-icon" src="assets/fist-five.svg"></mat-button-toggle>
+      </mat-button-toggle-group>
+      <button class="restart-button" *ngIf="canRestart()" mat-raised-button color="primary" (click)="restart()">Restart Game</button>
+    </div>
+  <div class="result-panel">
+      <table>
+          <tr>
+            <th>Player</th><th>Vote</th>
+          </tr>
+          <tr *ngFor="let client of clients">
+              <td *ngIf="client.thisIsYou">
+                <b>{{ client.username }}</b>
+              </td>
+              <td *ngIf="!client.thisIsYou">
+                {{ client.username }}
+              </td>
+              <td>
+                  <img *ngIf="client.hasVoted && client.vote < 0" class="vote-icon" src="assets/decided.svg">
+                  <img *ngIf="!client.hasVoted" class="vote-icon" src="assets/thinking.svg">
+                  <img *ngIf="client.hasVoted && client.vote == 0" class="vote-icon" src="assets/fist-zero.svg">
+                  <img *ngIf="client.hasVoted && client.vote == 1" class="vote-icon" src="assets/fist-one.svg">
+                  <img *ngIf="client.hasVoted && client.vote == 2" class="vote-icon" src="assets/fist-two.svg">
+                  <img *ngIf="client.hasVoted && client.vote == 3" class="vote-icon" src="assets/fist-three.svg">
+                  <img *ngIf="client.hasVoted && client.vote == 4" class="vote-icon" src="assets/fist-four.svg">
+                  <img *ngIf="client.hasVoted && client.vote == 5" class="vote-icon" src="assets/fist-five.svg">
+              </td>
+          </tr>
+        </table>
+    </div>
 </div>
