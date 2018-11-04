@@ -7,14 +7,11 @@ import SocketIO = require('socket.io');
 
 const app = express();
 
+
 //initialize a simple http server
 const server = http.createServer(app);
 
-app.get('/', function(req, res) {
-    console.log('Get index');
-    fs.createReadStream('./index.html')
-    .pipe(res);
-});
+app.use(express.static('dist/client'));
 
 let fistOfFiveServer = new FistOfFiveServer(server);
 

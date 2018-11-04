@@ -26,6 +26,10 @@ export class GameComponent implements OnInit {
     return this.gameService.clients;
   }
 
+  public get currentURL(){
+    return window.location.href;
+  }
+
   public canRestart() {
     return this.gameService.canRestart();
   }

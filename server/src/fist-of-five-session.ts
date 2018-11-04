@@ -88,7 +88,7 @@ export class FistOfFiveSession {
 
     restartGame(clientId: string): any {
         if(this.areYouAdmin(clientId)){
-            this.clientVotes.slice(0);
+            this.clientVotes.splice(0);
             this.clients.forEach((client) => {
                 client.vote = -1;
             });

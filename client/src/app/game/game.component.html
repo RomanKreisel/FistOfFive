@@ -1,6 +1,9 @@
 <div class="game-panel">
+  <div class="invite-panel">
+    To invite more players, send them this link: {{ currentURL }}
+  </div>
   <div class="choice-panel">
-    <div>How many fingers do you want to raise?</div>
+    <h2>How many fingers do you want to raise?</h2>
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
         <mat-button-toggle value="bold" (click)="vote(0)"><img class="vote-icon" src="assets/fist-zero.svg"></mat-button-toggle>
         <mat-button-toggle value="bold" (click)="vote(1)"><img class="vote-icon" src="assets/fist-one.svg"></mat-button-toggle>
@@ -10,8 +13,9 @@
         <mat-button-toggle value="bold" (click)="vote(5)"><img class="vote-icon" src="assets/fist-five.svg"></mat-button-toggle>
       </mat-button-toggle-group>
       <button class="restart-button" *ngIf="canRestart()" mat-raised-button color="primary" (click)="restart()">Restart Game</button>
-    </div>
+  </div>
   <div class="result-panel">
+    <h2>Results</h2>
       <table>
           <tr>
             <th>Player</th><th>Vote</th>

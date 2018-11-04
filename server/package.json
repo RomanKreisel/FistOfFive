@@ -1,11 +1,11 @@
 {
-  "name": "fistoffive",
+  "name": "fist-of-five-server",
   "version": "1.0.0",
   "description": "This is a game to support decision making, for distributed teams",
   "main": "src/server.js",
   "scripts": {
     "compile": "tsc",
-    "start": "node dist/server/src/server.js"
+    "start": "tsc && node dist/server/src/server.js"
   },
   "keywords": [
     "Agile",
