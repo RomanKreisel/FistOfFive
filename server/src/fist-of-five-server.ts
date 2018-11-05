@@ -45,6 +45,16 @@ export class FistOfFiveServer {
                 this.unregister(clientId);
             });
 
+            socket.on('disconnecting', () => {
+                this.unregister(clientId);
+            });
+
+            socket.on('error', (error) => {
+                console.log('Error occurred: ' + error);
+                this.unregister(clientId);
+            });
+
+
             let connectedMessage: ConnectedResponseMessage = {
                 responseType: ResponseType.Connected
             };
@@ -78,6 +88,7 @@ export class FistOfFiveServer {
             let session = <FistOfFiveSession> this.sessionsForClientIds.get(clientId);
             session.unregisterClient(clientId);
             if(session.clients.size == 0){
+                console.log('Session ' + session.sessionId + ' lost all clients and will be removed.')
                 this.sessionsForSessionIds.delete(session.sessionId);
             }
             this.sessionsForClientIds.delete(clientId);
