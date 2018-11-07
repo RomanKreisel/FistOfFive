@@ -21,7 +21,12 @@ RUN npm run build:prod
 RUN mkdir -p /fist-of-five/client/dist/fist-of-five /fist-of-five/server/dist/client
 RUN cp -a /fist-of-five/client/dist/fist-of-five/* /fist-of-five/server/dist/client
 
-WORKDIR /fist-of-five/server
+FROM node:11
+WORKDIR /
+RUN mkdir -p /fist-of-five
+COPY --from=build /fist-of-five/server /fist-of-five
+WORKDIR /fist-of-five
+RUN npm install --only=prod
 CMD npm run run
 
 EXPOSE 8999
