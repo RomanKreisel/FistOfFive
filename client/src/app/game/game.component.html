@@ -1,6 +1,7 @@
 <div class="game-panel">
   <div class="invite-panel">
-    To invite more players, send them this link: {{ currentURL }}
+    To invite more players, send them the URL of this page 
+    <button class="copy-url-button" mat-raised-button color="primary" (click)="copyURL()">Copy URL to Clipboard</button>
   </div>
   <div class="choice-panel">
     <h2>How many fingers do you want to raise?</h2>

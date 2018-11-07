@@ -26,10 +26,6 @@ export class GameComponent implements OnInit {
     return this.gameService.clients;
   }
 
-  public get currentURL(){
-    return window.location.href;
-  }
-
   public canRestart() {
     return this.gameService.canRestart();
   }
@@ -40,6 +36,18 @@ export class GameComponent implements OnInit {
 
   public restart() {
     this.gameService.restart();
+  }
+
+  public copyURL() {
+    const el = document.createElement('textarea');
+    el.value = window.location.href;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
 
   ngOnInit() {
