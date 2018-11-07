@@ -2,6 +2,7 @@
   "name": "fist-of-five-server",
   "version": "1.0.0",
   "description": "This is a game to support decision making, for distributed teams",
+  "repository": "https://github.com/RomanKreisel/FistOfFive.git",
   "main": "src/server.js",
   "scripts": {
     "build": "tsc",
