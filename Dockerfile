@@ -21,7 +21,7 @@ RUN npm run build:prod
 RUN mkdir -p /fist-of-five/client/dist/fist-of-five /fist-of-five/server/dist/client
 RUN cp -a /fist-of-five/client/dist/fist-of-five/* /fist-of-five/server/dist/client
 
-FROM node:11
+FROM node:11-alpine
 WORKDIR /
 RUN mkdir -p /fist-of-five
 COPY --from=build /fist-of-five/server /fist-of-five
