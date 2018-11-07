@@ -45,12 +45,8 @@ export class FistOfFiveSession {
         if(this.clientIdsInOrder.indexOf(clientId) === -1){
             return;
         }
-        this.clientVotes = this.clientVotes.filter((value) => {
-            value !== clientId
-        });
-        this.clientIdsInOrder = this.clientIdsInOrder.filter((value) => {
-            value !== clientId
-        });
+        this.clientVotes = this.clientVotes.filter(value => value !== clientId);
+        this.clientIdsInOrder = this.clientIdsInOrder.filter(value => value !== clientId);
         this.clients.delete(clientId);
         this.sendGameStatusResponse()
         console.log('Client ' + clientId + ' left session ' + this.sessionId + ' ('+this.clients.size+' client(s) connected in this session)');

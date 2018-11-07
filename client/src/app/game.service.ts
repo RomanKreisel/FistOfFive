@@ -23,19 +23,28 @@ export class GameService {
       this.socket = socketIo();
     }
     this.socket.on('message', (responseMessage: ResponseMessage) => {
-      console.log('Incoming message', responseMessage);
+      if(isDevMode() && console){
+        console.log('Incoming message', responseMessage);
+      }
       switch(responseMessage.responseType){
         case ResponseType.Connected:
-          console.log("Connected to backend service");
+          if(isDevMode() && console){
+            console.log("Connected to backend service");
+          }
           break;
         case ResponseType.Registered:
           let registeredResponseMessage = <RegisteredResponseMessage>responseMessage;
           this.sessionId = registeredResponseMessage.sessionId;
           this.router.navigateByUrl('game/' + this.sessionId)
-          console.log("Registered in session \"" + this.sessionId + "\"");
+          if(isDevMode() && console){
+            console.log("Registered in session \"" + this.sessionId + "\"");
+          }
           break;
         case ResponseType.GameStatus:
           let gameStatusMessage = <GameStatusResponseMessage>responseMessage;
+          if(isDevMode() && console){
+            console.log("GameStatus received: ", gameStatusMessage);
+          }
           this.clients.splice(0);
           gameStatusMessage.clients.forEach((client) => {
             if(client.thisIsYou){
@@ -49,7 +58,9 @@ export class GameService {
           });
           break;
         default:
-          console.error("Unknown message from server: ", responseMessage);
+          if(console){
+            console.error("Unknown message from server: ", responseMessage);
+          }
       }
     });
   }
