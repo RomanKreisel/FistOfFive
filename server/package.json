@@ -5,7 +5,8 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc-watch --project . --onSuccess \"node ./dist/server/src/server.js\" --onFailure \"echo Beep! Compilation Failed\" --compiler typescript/bin/tsc"
+    "start": "tsc-watch --project . --onSuccess \"node ./dist/server/src/server.js\" --onFailure \"echo Beep! Compilation Failed\" --compiler typescript/bin/tsc",
+    "build": "tsc"
   },
   "keywords": [
     "Agile",
