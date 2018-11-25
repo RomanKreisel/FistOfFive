@@ -2,12 +2,10 @@
   "name": "fist-of-five-server",
   "version": "1.0.0",
   "description": "This is a game to support decision making, for distributed teams",
-  "repository": "https://github.com/RomanKreisel/FistOfFive.git",
-  "main": "src/server.js",
+  "main": "src/server.ts",
   "scripts": {
-    "build": "tsc",
-    "start": "tsc && node dist/server/src/server.js",
-    "run": "node dist/server/src/server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc-watch --project . --onSuccess \"node ./dist/server/src/server.js\" --onFailure \"echo Beep! Compilation Failed\" --compiler typescript/bin/tsc"
   },
   "keywords": [
     "Agile",
@@ -15,8 +13,16 @@
     "Software Development",
     "Distributed Teams"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomanKreisel/FistOfFive.git"
+  },
   "author": "Roman Kreisel",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RomanKreisel/FistOfFive/issues"
+  },
+  "homepage": "https://github.com/RomanKreisel/FistOfFive#readme",
   "dependencies": {
     "@types/socket.io": "^1.4.39",
     "express": "^4.16.4",
@@ -27,6 +33,7 @@
     "@types/express": "^4.16.0",
     "@types/node": "^10.12.2",
     "@types/ws": "^6.0.1",
-    "typescript": "^3.1.6"
+    "typescript": "^3.1.6",
+    "tsc-watch": "^1.0.30"
   }
 }
