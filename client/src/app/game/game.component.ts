@@ -29,6 +29,10 @@ export class GameComponent implements OnInit {
   public canRestart() {
     return this.gameService.canRestart();
   }
+
+  public canVote() {
+    return this.gameService.canVote();
+  }
   
   public vote(fingers: number){
     this.gameService.vote(fingers);

@@ -1,13 +1,13 @@
 <div class="game-panel">
   <div class="choice-panel">
     <h2>How many fingers do you want to raise?</h2>
-      <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-      <mat-button-toggle value="bold" (click)="vote(0)"><img class="vote-icon" src="assets/fist-zero.svg"></mat-button-toggle>
-      <mat-button-toggle value="bold" (click)="vote(1)"><img class="vote-icon" src="assets/fist-one.svg"></mat-button-toggle>
-      <mat-button-toggle value="bold" (click)="vote(2)"><img class="vote-icon" src="assets/fist-two.svg"></mat-button-toggle>
-      <mat-button-toggle value="bold" (click)="vote(3)"><img class="vote-icon" src="assets/fist-three.svg"></mat-button-toggle>
-      <mat-button-toggle value="bold" (click)="vote(4)"><img class="vote-icon" src="assets/fist-four.svg"></mat-button-toggle>
-      <mat-button-toggle value="bold" (click)="vote(5)"><img class="vote-icon" src="assets/fist-five.svg"></mat-button-toggle>
+      <mat-button-toggle-group [disabled]='canVote()' aria-label="Font Style">
+      <mat-button-toggle (click)="vote(0)"><img class="vote-icon" src="assets/fist-zero.svg"></mat-button-toggle>
+      <mat-button-toggle (click)="vote(1)"><img class="vote-icon" src="assets/fist-one.svg"></mat-button-toggle>
+      <mat-button-toggle (click)="vote(2)"><img class="vote-icon" src="assets/fist-two.svg"></mat-button-toggle>
+      <mat-button-toggle (click)="vote(3)"><img class="vote-icon" src="assets/fist-three.svg"></mat-button-toggle>
+      <mat-button-toggle (click)="vote(4)"><img class="vote-icon" src="assets/fist-four.svg"></mat-button-toggle>
+      <mat-button-toggle (click)="vote(5)"><img class="vote-icon" src="assets/fist-five.svg"></mat-button-toggle>
     </mat-button-toggle-group>
     <button class="restart-button" *ngIf="canRestart()" mat-raised-button color="primary" (click)="restart()">Restart Game</button>
   </div>
