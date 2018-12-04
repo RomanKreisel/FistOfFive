@@ -5,3 +5,7 @@ restart-button {
 .vote-icon {
     height: 50px;
 }
+
+.invite-panel {
+    margin-top: 15px;
+}

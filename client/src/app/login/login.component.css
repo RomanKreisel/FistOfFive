@@ -1,5 +1,13 @@
+#login {
+  margin: 0 auto;
+  min-width: 150px;
+  max-width: 500px;
+}
+
 .form {
-    width: 100%;
-    min-width: 150px;
-    max-width: 500px;
-  }
+  text-align: center;
+}
+
+.form-element {
+  margin: 10px;
+}
