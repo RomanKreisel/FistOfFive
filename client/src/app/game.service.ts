@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import * as socketIo from 'socket.io-client';
 import { RegisterRequestMessage, RequestType, RequestMessage, ClientMessage, ResponseMessage, ResponseType, GameStatusResponseMessage, RegisteredResponseMessage, VoteRequestMessage, GameRestartRequestMessage } from '../../../common/src/messages';
-import { environment } from '../environments/environment.prod';
 import { Router } from '@angular/router';
 import { isDevMode } from '@angular/core';
 
@@ -13,6 +12,7 @@ export class GameService {
   public clients: ClientMessage[] = [];
   public sessionId: string;
   private socket: SocketIOClient.Socket;
+  private statusListeners: Array<() => void> = [];
 
   constructor(
     private router: Router
@@ -56,6 +56,9 @@ export class GameService {
               this.clients.push(client);
             }
           });
+          this.statusListeners.forEach((listener) => {
+            listener();
+          })
           break;
         default:
           if(console){
@@ -86,9 +89,20 @@ export class GameService {
     }
   }
 
+  public get numberOfPlayersWhoAlreadyVoted() {
+    return this.clients.filter((client) => {
+      return client.hasVoted
+    }).length;
+  }
+
   public canVote() {
     let myClient = this.myClient;
-    return myClient && myClient.hasVoted && myClient.vote > 0;
+    return myClient && (!myClient.hasVoted || myClient.vote < 0);
+  }
+
+  public alreadyVoted() {
+    let myClient = this.myClient;
+    return myClient && myClient.hasVoted;
   }
 
   public vote(fingers: number) {
@@ -109,6 +123,10 @@ export class GameService {
       requestType: RequestType.GameRestart
     };
     this.socket.send(message);
+  }
+
+  public subscribe(listener: () => void){
+    this.statusListeners.push(listener);
   }
 
 }

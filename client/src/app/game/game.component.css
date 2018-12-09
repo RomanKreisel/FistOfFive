@@ -1,11 +1,59 @@
-restart-button {
+.restart-button {
     margin-left: 20px;
 }
 
-.vote-icon {
-    height: 50px;
+.game-panel {
+    text-align: center;
 }
 
-.invite-panel {
-    margin-top: 15px;
+.voting-text {
+    font-weight: bold;
+}
+
+.voting-text-last {
+    color: red;
+}
+
+.expansion-panel-align {
+    flex-basis: 0;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.expansion-panel {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.expansion-panel-title {
+    text-align: start;
+}
+
+.expansion-panel-description {
+    text-align: start;
+}
+
+.expansion-panel-body {
+    text-align: center;
+}
+
+
+.vote-icon {
+    /* width: 25px;*/
+    max-width: 10%;
+    min-width: 25px;
+}
+
+.vote-button-group {
+}
+
+
+.vote-button {
+    /*
+    width: 45px;
+    height: 45px;
+    */
+    min-width: 45px;
+    max-width: 18%;
 }
