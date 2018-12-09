@@ -19,7 +19,7 @@
       </div>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [disabled]='!canVote()' class="expansion-panel" [expanded]="getStep() === 1" (opened)="setStep(1)">
+    <mat-expansion-panel [disabled]='clients.length < 2 || !canVote()' class="expansion-panel" [expanded]="getStep() === 1" (opened)="setStep(1)">
       <mat-expansion-panel-header>
         <mat-panel-title class="expansion-panel-title">
           Vote
@@ -47,7 +47,7 @@
     </mat-expansion-panel>
 
 
-    <mat-expansion-panel class="expansion-panel" [expanded]="getStep() === 2" (opened)="setStep(2)">
+    <mat-expansion-panel [disabled]='clients.length < 2' class="expansion-panel" [expanded]="getStep() === 2" (opened)="setStep(2)">
       <mat-expansion-panel-header>
         <mat-panel-title class="expansion-panel-title">
           Results
