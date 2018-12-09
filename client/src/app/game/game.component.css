@@ -14,6 +14,11 @@
     color: red;
 }
 
+.vote-summary {
+    font-weight: bold;
+    text-align: start;
+}
+
 .expansion-panel-align {
     flex-basis: 0;
     justify-content: space-between;

@@ -12,8 +12,10 @@
       </mat-expansion-panel-header>
       <div class="mat-expansion-panel-body">
         To invite more players, send them the URL of this page <br />
-        <button *ngIf="!canShare" class="copy-url-button" mat-raised-button color="primary" (click)="copyURL()">Copy URL to Clipboard</button>
-        <button *ngIf="canShare" class="copy-url-button" mat-raised-button color="primary" (click)="shareURL()">Share this game</button>
+        <button *ngIf="!canShare" class="copy-url-button" mat-raised-button color="primary" (click)="copyURL()">Copy
+          URL to Clipboard</button>
+        <button *ngIf="canShare" class="copy-url-button" mat-raised-button color="primary" (click)="shareURL()">Share
+          this game</button>
       </div>
     </mat-expansion-panel>
 
@@ -60,6 +62,13 @@
       </mat-action-row>
 
       <div class="mat-expansion-panel-body">
+
+        <div class="vote-summary">
+          <h2>Summary:</h2>
+          <div>{{ voteSummary }}</div>
+        </div>
+        <hr />
+        <h2>Details:</h2>
         <table>
           <!--tr>
                     <th>Player</th><th>Vote</th>

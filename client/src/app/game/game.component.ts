@@ -85,6 +85,21 @@ export class GameComponent implements OnInit {
     }
   }
 
+  public get voteSummary() {
+    if(this.canVote()){
+      return "";
+    } else {
+      let sum = 0;
+      this.gameService.clients.forEach((client) => {
+        if(client.vote >= 0){
+          sum += client.vote;
+        }
+      });
+      let average = sum / this.gameService.clients.length;
+      return "The average vote was " + average.toFixed(1);
+    }
+  }
+
   public restart() {
     this.gameService.restart();
   }
