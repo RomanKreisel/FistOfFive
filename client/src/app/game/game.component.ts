@@ -60,6 +60,12 @@ export class GameComponent implements OnInit {
     return false;
   }
 
+  public get canShare(): boolean {
+    if(navigator['share']){
+      return true;
+    }
+  }
+
   public get votingText() {
     let alreadyVoted = this.gameService.alreadyVoted();
     let votesOutstanding = this.gameService.clients.length - this.gameService.numberOfPlayersWhoAlreadyVoted;
@@ -82,6 +88,20 @@ export class GameComponent implements OnInit {
   public restart() {
     this.gameService.restart();
   }
+
+  public shareURL() {
+    if (navigator['share']) {
+      navigator['share']({
+          title: 'Fist of Five Game',
+          text: 'Let\'s play \'Fist of Five\'',
+          url: window.location.href,
+      })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    }
+  }
+
+
 
   public copyURL() {
     const el = document.createElement('textarea');

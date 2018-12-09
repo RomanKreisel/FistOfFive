@@ -12,7 +12,8 @@
       </mat-expansion-panel-header>
       <div class="mat-expansion-panel-body">
         To invite more players, send them the URL of this page <br />
-        <button class="copy-url-button" mat-raised-button color="primary" (click)="copyURL()">Copy URL to Clipboard</button>
+        <button *ngIf="!canShare" class="copy-url-button" mat-raised-button color="primary" (click)="copyURL()">Copy URL to Clipboard</button>
+        <button *ngIf="canShare" class="copy-url-button" mat-raised-button color="primary" (click)="shareURL()">Share this game</button>
       </div>
     </mat-expansion-panel>
 
