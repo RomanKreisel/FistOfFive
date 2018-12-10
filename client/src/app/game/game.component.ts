@@ -2,6 +2,7 @@ import { Component, OnInit, NgModule } from '@angular/core';
 import { GameService } from '../game.service';
 import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { ClientMessage, GameStatusResponseMessage } from '../../../../common/src/messages';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-game',
@@ -12,11 +13,13 @@ export class GameComponent implements OnInit {
   private myVote: number = -1;
   private step = 0;
   private lastGameStatusUpdateVoteAllowed = true;
+  private messageQueue: string[] = [];
 
   constructor(
     private gameService: GameService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public snackBar: MatSnackBar
   ) {
   }
 
@@ -142,7 +145,7 @@ export class GameComponent implements OnInit {
         this.router.navigateByUrl('login');
       }
     } else {
-      this.gameService.subscribe(() => {
+      this.gameService.subscribeStatusListener(() => {
         if (this.gameService.clients.length == 1) {
           this.setStep(0);
         } else {
@@ -159,8 +162,67 @@ export class GameComponent implements OnInit {
           }
         }
       });
+
+      this.gameService.subscribeClientListener((clientsJoined, clientsLeft) => {
+        let openNextMessage = false;
+        if(this.messageQueue.length == 0){
+          openNextMessage = true;
+        }
+
+        let joinMessage = "";
+        clientsJoined.forEach((client, index, array) => {
+          if(!client.thisIsYou){
+            if(index > 0 && index < array.length-1){
+              joinMessage += ", ";
+            } else if (index > 0){
+              joinMessage += " and ";
+            }
+            joinMessage+=client.username;
+          }
+        });
+        if(clientsJoined.length > 1){
+          joinMessage += " have joined";
+        } else if (clientsJoined.length === 1){
+          joinMessage += " has joined";
+        }
+        if(joinMessage){
+          this.messageQueue.push(joinMessage);
+        }
+
+        let leaveMessage = "";
+        clientsLeft.forEach((client, index, array) => {
+          if(!client.thisIsYou){
+            if(index > 0 && index < array.length-1){
+              leaveMessage += ", ";
+            } else if (index > 0){
+              leaveMessage += " and ";
+            }
+            leaveMessage+=client.username;
+          }
+        });
+        if(clientsLeft.length > 1){
+          leaveMessage += " have left";
+        } else if (clientsLeft.length === 1){
+          leaveMessage += " has left";
+        }
+        if(leaveMessage){
+          this.messageQueue.push(leaveMessage);
+        }
+
+        if(openNextMessage){
+          this.openNextMessage();
+        }
+      })
     }
   }
 
+  private openNextMessage() {
+    if(this.messageQueue.length > 0){
+      this.snackBar.open(this.messageQueue.shift(), undefined, { duration: 5000 })
+      .afterDismissed().subscribe(() => {
+        this.openNextMessage();
+      })
+    }
+  }
 
 }

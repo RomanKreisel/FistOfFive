@@ -13,6 +13,7 @@ export class GameService {
   public sessionId: string;
   private socket: SocketIOClient.Socket;
   private statusListeners: Array<() => void> = [];
+  private clientsListeners: Array<(clientsJoined: Array<ClientMessage>, clientsLeft: Array<ClientMessage>) => void> = [];
 
   constructor(
     private router: Router
@@ -45,6 +46,28 @@ export class GameService {
           if(isDevMode() && console){
             console.log("GameStatus received: ", gameStatusMessage);
           }
+
+          let clientsJoined: ClientMessage[] = [];
+          gameStatusMessage.clients.forEach((client) => {
+            if(!client.thisIsYou && !this.clients.find((existingClient) => {
+              return existingClient.username === client.username;
+            })){
+              clientsJoined.push(client);
+            }
+          });
+
+          let clientsLeft: ClientMessage[] = [];
+          this.clients.forEach((client) => {
+              if(!client.thisIsYou && !gameStatusMessage.clients.find((newClient) => {
+                return newClient.username === client.username;
+              })){
+                clientsLeft.push(client);
+              }
+          });
+          this.clientsListeners.forEach((listener) => {
+            listener(clientsJoined, clientsLeft);
+          });
+
           this.clients.splice(0);
           gameStatusMessage.clients.forEach((client) => {
             if(client.thisIsYou){
@@ -125,8 +148,12 @@ export class GameService {
     this.socket.send(message);
   }
 
-  public subscribe(listener: () => void){
+  public subscribeStatusListener(listener: () => void){
     this.statusListeners.push(listener);
+  }
+
+  public subscribeClientListener(listener: (clientsJoined: Array<ClientMessage>, clientsLeft: Array<ClientMessage>) => void){
+    this.clientsListeners.push(listener);
   }
 
 }
