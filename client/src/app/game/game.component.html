@@ -28,8 +28,8 @@
           How many fingers do you want to raise?
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <mat-action-row>
-        <button mat-raised-button class="restart-button" *ngIf="canRestart()" color="primary" (click)="restart()">Restart
+      <mat-action-row *ngIf="canRestart()">
+        <button mat-raised-button class="restart-button" color="primary" (click)="restart()">Restart
           Game</button>
       </mat-action-row>
       <div class="mat-expansion-panel-body">
@@ -56,8 +56,8 @@
           What are the results of the game?
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <mat-action-row>
-        <button mat-raised-button class="restart-button" *ngIf="canRestart()" color="primary" (click)="restart()">Restart
+      <mat-action-row *ngIf="canRestart()">
+        <button mat-raised-button class="restart-button" color="primary" (click)="restart()">Restart
           Game</button>
       </mat-action-row>
 
