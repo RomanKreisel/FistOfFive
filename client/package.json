@@ -34,7 +34,7 @@
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "tslib": "^1.9.3",
-    "zone.js": "~0.9.0"
+    "zone.js": "~0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.8",
