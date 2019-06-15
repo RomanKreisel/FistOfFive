@@ -25,4 +25,4 @@ WORKDIR /fist-of-five
 RUN npm install --only=prod
 CMD npm run run
 
-EXPOSE 8999
+EXPOSE 80
