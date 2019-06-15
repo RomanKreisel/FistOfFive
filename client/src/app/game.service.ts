@@ -19,6 +19,7 @@ export class GameService {
     private router: Router
   ) { 
     if(isDevMode()){
+      console.log("DevMode active! Listening on Port 8999")
       this.socket = socketIo('http://localhost:8999');
     } else {
       this.socket = socketIo();
