@@ -23,6 +23,7 @@ RUN mkdir -p /fist-of-five
 COPY --from=build /fist-of-five/server /fist-of-five
 WORKDIR /fist-of-five
 RUN npm install --only=prod
+ENV PORT=80
 CMD npm run run
 
 EXPOSE 80
