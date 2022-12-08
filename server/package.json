@@ -27,7 +27,7 @@
   "homepage": "https://github.com/RomanKreisel/FistOfFive#readme",
   "dependencies": {
     "@types/socket.io": "^2.1.2",
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "socket.io": "^2.2.0",
     "ws": "^7.0.0"
   },
